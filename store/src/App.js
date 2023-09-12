@@ -21,7 +21,12 @@ function App() {
         {products.length > 0 ? (
           <ul>
             {products.map((product, index) => (
-              <li key={index}>{product.name}</li>
+              <li key={index}>
+                <p>{product.name} - {product.price}$</p>
+                {product.image && (
+                  <img src={product.image} alt={product.name} />
+                )}
+              </li>
             ))}
           </ul>
         ) : (
