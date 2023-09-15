@@ -1,19 +1,4 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-
-function Products() {
-    const [products, setProducts] = useState([])
-  
-    function getProducts(){
-      axios.get('http://127.0.0.1:8000/products/')
-        .then((response) => {
-          console.log(response.data)
-          setProducts(response.data)
-        })
-        .catch((error) => {
-          console.log(error.data)
-        });
-    }
+function Products({products}) {
     return (
       <>
       <div>
@@ -38,7 +23,6 @@ function Products() {
           <p>No products</p>
         )}
         </div>
-      <button onClick={getProducts}>Get Products</button>
       </>
     );
   }
