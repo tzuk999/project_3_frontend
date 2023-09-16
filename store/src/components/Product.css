@@ -1,0 +1,58 @@
+/* Product.css */
+
+/* Style for the product card container */
+.product-card {
+    width: 18rem; /* Set the desired width for each card */
+    margin: 10px; /* Add margin to create spacing between cards */
+    display: inline-block; /* Display cards in a row */
+    vertical-align: top; /* Align cards to the top of the row */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a shadow for a card effect */
+  }
+  
+  /* Style for the card title */
+  .product-card .card-title {
+    font-size: 1.25rem;
+  }
+  
+  /* Style for the card image */
+  .product-card .card-img-top {
+    max-height: 200px; /* Set the maximum height for the card image */
+    object-fit: contain; /* Adjust image size while maintaining aspect ratio */
+  }
+  
+  /* Style for the card body */
+  .product-card .card-body {
+    height: 200px; /* Set the fixed height for the card body */
+    overflow: hidden; /* Hide overflow content */
+    position: relative; /* Set position for the tooltip */
+  }
+  
+  /* Style for truncated text with ellipsis */
+  .product-card .card-text {
+    white-space: nowrap; /* Prevent text from wrapping to multiple lines */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Display ellipsis (...) for truncated text */
+  }
+  
+  /* Style for tooltip */
+  .product-card .card-tooltip {
+    position: absolute;
+    top: 100%; /* Position below the card body */
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Tooltip background color */
+    color: #fff; /* Tooltip text color */
+    padding: 8px;
+    font-size: 14px;
+    white-space: normal; /* Allow text to wrap in the tooltip */
+    z-index: 1; /* Ensure tooltip appears above other content */
+    opacity: 0; /* Initially hide the tooltip */
+    transition: opacity 0.2s; /* Add a smooth transition effect */
+    pointer-events: none; /* Allow interaction with elements behind the tooltip */
+  }
+  
+  /* Show the tooltip on hover */
+  .product-card:hover .card-tooltip {
+    opacity: 1; /* Show the tooltip on hover */
+  }
+  
