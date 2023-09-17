@@ -21,15 +21,32 @@ function StoreNavbar() {
         });
     }
 
-    useEffect(() => {
-    axios.get('http://127.0.0.1:8000/categories/')
-      .then((response) => {
+    function getCategories(){
+        axios.get('http://127.0.0.1:8000/categories/')
+        .then((response) => {
         setCategories(response.data);
       })
       .catch((error) => {
         console.error('Error fetching categories:', error);
       });
-  }, []);
+        }
+    function getProductsBy(category){
+        axios.get(`http://127.0.0.1:8000/products/category/${category}/`)
+        .then((response) => {
+          console.log(response.data)
+          setProducts(response.data)
+        })
+        .catch((error) => {
+          console.log(error.data)
+        });
+    }
+    
+
+    useEffect(() => {
+        getCategories();
+        getProducts();
+     }, []);
+    
 
   return (
     <><Navbar bg="light" expand="lg">
@@ -41,7 +58,7 @@ function StoreNavbar() {
                       <Nav.Link href="#home" onClick={getProducts}>Home</Nav.Link>
                       <NavDropdown title="Categories" id="basic-nav-dropdown">
                           {categories.map((category) => (
-                              <NavDropdown.Item key={category.id} href={`#action/${category.id}`}>
+                              <NavDropdown.Item key={category.id} onClick={() => getProductsBy(category.name)}>
                                   {category.name}
                               </NavDropdown.Item>
                           ))}
