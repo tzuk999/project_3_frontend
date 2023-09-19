@@ -66,12 +66,18 @@ function StoreNavbar() {
 
   const handleLogOut = () => {
     const refresh_token = localStorage.getItem('refresh_token');
+    
+    if (!refresh_token) {
+      console.error('Refresh token not found in localStorage');
+      return;
+    }
   
     axios
-      .post('http://127.0.0.1:8000/logout/', { refresh_token })
+      .post('http://127.0.0.1:8000/logout/', { refresh_token: refresh_token }) // Send the refresh_token
       .then((response) => {
         console.log('Logged out successfully:', response.data);
   
+        // Clear local storage
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('user_id');
@@ -82,8 +88,8 @@ function StoreNavbar() {
       .catch((error) => {
         console.error('Logout error:', error.response.data);
       });
-
   };
+  
 
   return (
     <>
