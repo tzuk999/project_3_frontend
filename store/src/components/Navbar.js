@@ -44,7 +44,7 @@ function StoreNavbar() {
 
   function getProductsBy(category) {
     axios
-      .get(`http://127.0.0.1:8000/products/category/${category}/`)
+      .get(`http://127.0.0.1:8000/products/?category=${category}`)
       .then((response) => {
         console.log(response.data);
         setProducts(response.data);

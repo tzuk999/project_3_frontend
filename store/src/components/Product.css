@@ -2,6 +2,7 @@
 
 /* Style for the product card container */
 .product-card {
+    height: 24rem;
     width: 18rem; /* Set the desired width for each card */
     margin: 10px; /* Add margin to create spacing between cards */
     display: inline-block; /* Display cards in a row */
@@ -16,7 +17,7 @@
   
   /* Style for the card image */
   .product-card .card-img-top {
-    max-height: 200px; /* Set the maximum height for the card image */
+    height: 190px; /* Set the maximum height for the card image */
     object-fit: contain; /* Adjust image size while maintaining aspect ratio */
   }
   

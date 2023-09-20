@@ -31,7 +31,6 @@ function Products({ products }) {
 
   return (
     <div>
-    <h1>Product List</h1>
     {products.length > 0 ? (
       products.map((product) => (
         <Card className="product-card" key={product.id}> {/* Apply the product-card class */}
