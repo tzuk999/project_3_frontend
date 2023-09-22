@@ -24,7 +24,7 @@ function Cart({ show, handleCloseCart }) {
       axios
         .get(`http://127.0.0.1:8000/cart/${cartId}/`, { headers })
         .then((response) => {
-            console.log(response)
+          console.log(response)
           setCartItems(response.data);
         })
         .catch((error) => {
@@ -32,6 +32,9 @@ function Cart({ show, handleCloseCart }) {
         });
     }
   }, [show, cartId, accessToken]);
+
+  // Calculate the total price of all cart items
+  const totalCartPrice = cartItems.reduce((total, item) => total + item.total_price, 0);
 
   return (
     <>
@@ -43,10 +46,12 @@ function Cart({ show, handleCloseCart }) {
           <div>
             {cartItems.map((item) => (
               <p key={item.id}>
-                Product: {item.product_name}  -  Quantity: {item.quantity}  - Price : ${item.total_price}
+                <span>Product: {item.product_name}</span> | <span>Quantity: {item.quantity}</span> | <span>Price: ${item.total_price}</span>
               </p>
             ))}
           </div>
+          <hr />
+          <p>Total Price: ${totalCartPrice}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseCart}>
