@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown, Button } from 'react-bootstrap';
 import axios from 'axios';
 import Products from './Products';
 import AuthModal from './AuthModal';
@@ -12,6 +12,21 @@ function StoreNavbar() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showCart, setShowCart] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = () => {
+    axios
+      .get(`http://127.0.0.1:8000/products/?search=${searchTerm}`)
+      .then((response) => {
+        console.log(response.data);
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        console.log(error.data);
+      });
+    console.log('Searching for:', searchTerm);
+    setSearchTerm("")
+  };
 
   const handleShowAuthModal = () => {
     setShowAuthModal(true);
@@ -114,7 +129,7 @@ function StoreNavbar() {
     <>
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand href="#home" onClick={getProducts}>
+          <Navbar.Brand onClick={getProducts}>
             Store
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -135,6 +150,20 @@ function StoreNavbar() {
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
+          <div>
+            <input className="d-flex"
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div>
+              <Button variant="outline-success" onClick={() => handleSearch()}>
+                Search
+              </Button>
+            </div>
+          
           {isAuthenticated ? (
             // Display "Log Out" when authenticated
             <Nav.Link
@@ -150,7 +179,7 @@ function StoreNavbar() {
               id="signIn"
               onClick={handleShowAuthModal}
             >
-              Sign In / Sign Up
+              Log In / Sign Up
             </Nav.Link>
           )}
           <Nav.Link 
