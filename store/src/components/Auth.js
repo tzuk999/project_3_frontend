@@ -26,12 +26,13 @@ function Auth({ handleClose, isSignIn, setIsSignIn, setTokens }) {
       .post(apiUrl, formData)
       .then((response) => {
         if (response.data) {
-          const { access_token, refresh_token, user_id, username } = response.data;
+          const { access_token, refresh_token, user_id, username, cart_id } = response.data;
 
           localStorage.setItem('access_token', access_token);
           localStorage.setItem('refresh_token', refresh_token);
           localStorage.setItem('user_id', user_id);
           localStorage.setItem('username', username);
+          localStorage.setItem('cart_id', cart_id);
 
           setTokens(access_token, refresh_token); // Set the authenticated status to true
           handleClose(); // Close the modal after successful login or signup

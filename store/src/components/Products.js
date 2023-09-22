@@ -4,8 +4,9 @@ import Card from 'react-bootstrap/Card';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import './Product.css';
+import axios from 'axios';
 
-function Products({ products }) {
+function Products({ products, isAuthenticated }) {
   // State to store quantity for each product
   const [quantities, setQuantities] = useState({});
 
@@ -24,6 +25,23 @@ function Products({ products }) {
 
     // Perform any actions you want with the quantity
     console.log(`Product ${productId} - Quantity: ${quantity}`);
+    if (isAuthenticated) {
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        'Content-Type': 'application/json', // Include Content-Type header
+      };
+      const cartId = localStorage.getItem('cart_id');
+      axios
+        .put(`/cart/${cartId}/update/${productId}/`, { quantity }, { headers }) // Use headers directly here
+        .then((response) => {
+          console.log(response.data);
+          // Handle the response here
+        })
+        .catch((error) => {
+          console.error(error);
+          // Handle errors here
+        });
+    }
     setQuantities((prevQuantities) => ({
         ...prevQuantities,
         [productId]: 0,}));
@@ -53,17 +71,19 @@ function Products({ products }) {
               </Card.Text>
             </div>
             <div>
-                <input
-                  type="number"
-                  min="0"
-                  value={quantities[product.id] || 0}
-                  onChange={(e) => {
-                    const newValue = parseInt(e.target.value, 10);
-                    handleQuantityChange(product.id, isNaN(newValue) ? 0 : newValue);
-                  }}
-                />
-              </div>
-
+              <input
+                type="number"
+                min="0"
+                max={product.stock} 
+                value={quantities[product.id] || 0}
+                onChange={(e) => {
+                  const newValue = parseInt(e.target.value, 10);
+                  const maxValue = parseInt(e.target.max, 10);
+                  const clampedValue = isNaN(newValue) ? 0 : Math.min(newValue, maxValue);
+                  handleQuantityChange(product.id, clampedValue);
+                }}
+              />
+            </div>
               <Button variant="primary" onClick={() => handleAddToCart(product.id)}>
                 Add to Cart
               </Button>
