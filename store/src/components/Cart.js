@@ -2,18 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import './Products.js';
 
-function Cart({ show, handleCloseCart }) {
+function Cart({ show, handleCloseCart, addToCart, isAuthenticated}) {
   const [cartItems, setCartItems] = useState([]);
   const [accessToken, setAccessToken] = useState(localStorage.getItem('access_token'));
   const [cartId, setCartId] = useState(localStorage.getItem('cart_id'));
   const [username, setUsername] = useState(localStorage.getItem('username'));
-
-  useEffect(() => {
-    setAccessToken(localStorage.getItem('access_token'))
-    setCartId(localStorage.getItem('cart_id'))
-    setUsername(localStorage.getItem('username'))
-
+  function getCart(){
     if (show && cartId && accessToken) {
       // Define headers with the access token
       const headers = {
@@ -31,10 +27,32 @@ function Cart({ show, handleCloseCart }) {
           console.error('Error fetching cart items:', error);
         });
     }
+  }
+  useEffect(() => {
+    setAccessToken(localStorage.getItem('access_token'))
+    setCartId(localStorage.getItem('cart_id'))
+    setUsername(localStorage.getItem('username'))
+    getCart()
   }, [show, cartId, accessToken]);
 
   // Calculate the total price of all cart items
   const totalCartPrice = cartItems.reduce((total, item) => total + item.total_price, 0);
+
+  async function removeItem(productId) {
+    try {
+      
+      await addToCart(productId, 0);
+  
+      // Insert a one-second pause (1000 milliseconds)
+      await new Promise(resolve => setTimeout(resolve, 50));
+  
+      
+      getCart();
+    } catch (error) {
+      console.error('Error removing item:', error);
+    }
+  }
+  
 
   return (
     <>
@@ -45,13 +63,22 @@ function Cart({ show, handleCloseCart }) {
         <Modal.Body>
           <div>
             {cartItems.map((item) => (
-              <p key={item.id}>
-                <span>Product: {item.product_name}</span> | <span>Quantity: {item.quantity}</span> | <span>Price: ${item.total_price}</span>
-              </p>
+              <div key={item.id}>
+                <span>Product: {item.product_name}</span> | 
+                <span>Quantity: {item.quantity}</span> | 
+                <span>Price: ${(Number(item.total_price).toFixed(2))}</span> | 
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  onClick={() => removeItem(item.product_id)}
+                >
+                 Remove
+                </Button>
+              </div>
             ))}
           </div>
           <hr />
-          <p>Total Price: ${totalCartPrice}</p>
+          <p>Total Price: ${(Number(totalCartPrice).toFixed(2))}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseCart}>

@@ -57,6 +57,29 @@ function StoreNavbar() {
       });
   }
 
+  function addToCart(productId,quantity){
+
+    // Perform any actions you want with the quantity
+    console.log(`Product ${productId} - Quantity: ${quantity}`);
+    if (isAuthenticated) {
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        'Content-Type': 'application/json', // Include Content-Type header
+      };
+      const cartId = localStorage.getItem('cart_id');
+      axios
+        .put(`/cart/${cartId}/update/${productId}/`, { quantity }, { headers }) // Use headers directly here
+        .then((response) => {
+          console.log(response.data);
+          // Handle the response here
+        })
+        .catch((error) => {
+          console.error(error);
+          // Handle errors here
+        });
+    }
+  };
+
   function getCategories() {
     axios
       .get('http://127.0.0.1:8000/categories/')
@@ -191,11 +214,11 @@ function StoreNavbar() {
       </Navbar>
       <br />
       <div>
-        <Products products={products} isAuthenticated={isAuthenticated}/>
+        <Products products={products} isAuthenticated={isAuthenticated} addToCart={addToCart}/>
       </div>
 
       <AuthModal show={showAuthModal} handleClose={handleCloseAuthModal} setIsAuthenticated={setIsAuthenticated} />
-      <Cart show={showCart} handleCloseCart={handleCloseCart}/>
+      <Cart show={showCart} handleCloseCart={handleCloseCart} addToCart={addToCart} isAuthenticated={isAuthenticated}/>
     </>
   );
 }
